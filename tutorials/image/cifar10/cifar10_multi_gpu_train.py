@@ -256,7 +256,10 @@ def train():
                              examples_per_sec, sec_per_batch))
 
       if step % 100 == 0:
-        summary_str = sess.run(summary_op)
+        run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+        run_metadata = tf.RunMetadata()
+        summary_str = sess.run(summary_op,options = run_options, run_metadata=run_metadata)
+        summary_writer.add_run_metadata(run_metadata, 'run_step%d'%step)
         summary_writer.add_summary(summary_str, step)
 
       # Save the model checkpoint periodically.
